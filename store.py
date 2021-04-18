@@ -32,33 +32,65 @@ class GroceryStore:
 
 class Customer(GroceryStore):
     ""
-    def __init__(self):
+    def __init__(self, time_stamp, cust_id, num_items):
 
-        pass
+        self.time_stamp = time_stamp
+        self.cust_id = cust_id
+        self.num_items = num_items
+
 
 class exp_checkout(GroceryStore):
     ""
-    def __init__(self,config):
-        self.line_cap =config['line_capacity']
 
-        pass
+    def __init__(self,config):
+
+        self.cust_in_line_list=[]
+        self.line_cap = config['line_capacity']
+        self.state = 'OPEN'
+
+    def proc_checkout(self):
+
+        checkout_time = ((self.cust_in_line_list[0].num_items) + 4)
+
+
+
+
 
 class standard_checkout(GroceryStore):
     ""
     def __init__(self,config):
+
         self.line_capacity=config['line_capacity']
-        pass
+        self.cust_in_line_list=[]
+        self.state = 'OPEN'
+
+
+    def proc_checkout(self):
+
+        checkout_time = (self.cust_in_line_list[0].num_items) + 7
+
+
 
 class self_checkout(GroceryStore):
     ""
+
     def __init__(self,config):
+
         self.line_cap=config['line_capacity']
-        pass
+        self.cust_in_line_list=[]
+        self.state = 'OPEN'
+
+
+    def proc_checkout(self):
+
+        checkout_time = ((self.cust_in_line_list[0].num_items)*2 + 1)
+
 
 
 
 # You can run a basic test here using the default 'config.json'
 # file we provided.
+
 if __name__ == '__main__':
     store = GroceryStore('config.json')
-    # Execute some methods here
+
