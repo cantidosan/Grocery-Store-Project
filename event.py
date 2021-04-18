@@ -166,33 +166,70 @@ class Event:
         """
         raise NotImplementedError
 
-
 # TODO: Create subclasses for the different types of events below.
+
+class Cust_arrive(Event):
+    "Once the customer info is read from the file the second element is confirmed as 'Arrive'"
+    ""
+    def __init__(self,timestamp,Cust_id,prod_count):
+        super().__init__(timestamp)
+        self.cust_id   = Cust_id
+        self.prod_count = prod_count
+
+
+class Line_close(Event):
+    "Once the checkout counter information is updated as 'Close'"
+
+
+    def __init__(self,timestamp,closing_checkout_number):
+        super().__init__(timestamp)
+        self.closing_checkout_number = closing_checkout_number
+
+
+
 
 
 # TODO: Complete this function, which creates a list of events from a file.
 def create_event_list(filename):
-    """Return a list of Events based on raw list of events in <filename>.
+        """Return a list of Events based on raw list of events in <filename>.
 
-    Precondition: the file stored at <filename> is in the format specified
-    by the assignment handout.
+        Precondition: the file stored at <filename> is in the format specified
+        by the assignment handout.
 
-    @param filename: str
-        The name of a file that contains the list of events.
-    @rtype: list[Event]
-    """
-    events = []
-    with open(filename, 'r') as file:
-        for line in file:
-            # Create a list of words in the line, e.g.
-            # ['60', 'Arrive', 'Bob', '5'].
-            # Note that these are strings, and you'll need to convert some of
-            # them to ints.
-            tokens = line.split()
+        @param filename: str
+            The name of a file that contains the list of events.
+        @rtype: list[Event]
+        """
+        events = []
+        with open(filename, 'r') as file:
 
-    return events
+            for line in file:
+
+                # Create a list of words in the line, e.g.
+                # ['60', 'Arrive', 'Bob', '5'].
+                # Note that these are strings, and you'll need to convert some of
+                # them to ints.
+                #in our example, token[0] ='60'
+                tokens = line.split()
+
+                if 'Arrive' == tokens[1]:
+                    events.append(Line_close(tokens[0],tokens[2]))
+
+                elif 'Close' == token[1]:
+
+                    events.append(Cust_arrive(tokens[0],tokens[2],tokens[3]))
+                else:
+                    raise NotImplementedError
+
+
+
+
+
+        print(events)
+        return events
 
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+    #import doctest
+    #doctest.testmod()
+    pass
