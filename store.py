@@ -30,6 +30,28 @@ class GroceryStore:
         # <config> is now a dictionary with the keys 'cashier_count',
         # 'express_count', 'self_serve_count', and 'line_capacity'.
 
+        self.checkout_line_list = []
+        #open the different checkout counters in the store
+
+        for element in range(config['cashier_count']):
+            self.checkout_line_list.append(standard_checkout)
+            print(self.checkout_line_list)
+            print(element)
+        for element in range(config['express_count']):
+            self.checkout_line_list.append(exp_checkout)
+            print(self.checkout_line_list)
+
+        for element in range(config['self_serve_count']):
+            self.checkout_line_list.append(self_checkout)
+            print(self.checkout_line_list)
+
+
+
+
+
+
+
+
 class Customer(GroceryStore):
     ""
     def __init__(self, time_stamp, cust_id, num_items):

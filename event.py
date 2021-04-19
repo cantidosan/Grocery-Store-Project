@@ -176,6 +176,11 @@ class Cust_arrive(Event):
         self.cust_id   = Cust_id
         self.prod_count = prod_count
 
+    def __repr__(self):
+        #returns a string representation of the object which can be used to construct the object again
+        #'Timestamp:60 , Cust_id: BOb , PRod Count: 12'
+
+        return  str(self.timestamp) + " " +(self.cust_id) + " " + (self.prod_count)
 
 class Line_close(Event):
     "Once the checkout counter information is updated as 'Close'"
@@ -185,7 +190,11 @@ class Line_close(Event):
         super().__init__(timestamp)
         self.closing_checkout_number = closing_checkout_number
 
+    def __repr__(self):
+        #returns a string representation of the object which can be used to construct the object again
+        #'Timestamp:5 , 'Close' , Closing_checkout_number: 2'
 
+        return  str(self.timestamp) + " " +(self.closing_checkout_number)
 
 
 
@@ -213,23 +222,24 @@ def create_event_list(filename):
                 tokens = line.split()
 
                 if 'Arrive' == tokens[1]:
-                    events.append(Line_close(tokens[0],tokens[2]))
-
-                elif 'Close' == token[1]:
+                    #create arrival event and append it to events list
 
                     events.append(Cust_arrive(tokens[0],tokens[2],tokens[3]))
+                elif 'Close' == tokens[1]:
+                    #create checkoutlane closure event and add it to the events list
+
+                    events.append(Line_close(tokens[0],tokens[2]))
                 else:
+                    #to account for any illogical events read
                     raise NotImplementedError
 
 
 
 
-
-        print(events)
         return events
 
 
 if __name__ == '__main__':
-    #import doctest
-    #doctest.testmod()
-    pass
+    import doctest
+    doctest.testmod()
+

@@ -128,4 +128,15 @@ class PriorityQueue(Container):
         ['arju', 'fred', 'hat', 'mona']
         """
         # TODO: Implement this method.
-        pass
+        loc=0
+        for event in self._items:
+            # _item contains 3 events with the timestamps
+            #4,8 and 16
+
+            if item.timestamp >= event.timestamp:
+                break
+            #arrays will be pushed down by 1 value and the
+            #new timestamped event will take the spot
+            loc+=1
+        return self._items.append(item)
+
