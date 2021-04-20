@@ -131,15 +131,21 @@ class PriorityQueue(Container):
         # TODO: Implement this method.
         loc = 0
         if not self._items:
+            print('works fine')
             self._items = [item]
+
+        else:
             for event in self._items:
-            # _item contains 3 events with the timestamps
-            # 4,8 and 16
-                print('within for loop')
-                if not item.__le__(event):
-                    print('event comparison')
-                    self._items.insert(loc, item)
+                # _item contains 3 events with the timestamps
+                # 4,8 and 16
+                #print(f'{item.timestamp} < {event.timestamp}')
+                #print(item.__lt__(event)#)
+
+                if item.__lt__(event):
+                    #print(f'{item.timestamp} > {event.timestamp}')
+                    #print(item.__lt__(event))
                     break
-            # arrays will be pushed down by 1 value and the
-            # new timestamped event will take the spot
-            loc += 1
+                #print(loc)
+                loc+=1
+            self._items.insert(loc,item)
+            print(self._items)

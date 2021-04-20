@@ -63,7 +63,7 @@ class GroceryStoreSimulation:
         }
 
         initial_events = create_event_list(event_file)
-        print(self._events)
+
         for event in initial_events:
             self._events.add(event)
 
@@ -71,18 +71,18 @@ class GroceryStoreSimulation:
         # TODO: Process all of the events, collecting statistics along the way.
 
         # cycle through every initial event
-        print(self._events.is_empty())
+
         while not self._events.is_empty():
 
             event = self._events.remove()
 
-            print('enter the while loop')
+
             # checking what type of events is being processed new customer or line closure
             if isinstance(event, Cust_arrive):
                 shortest_line = 0
-                for line in self._store.checkout_line_list:
-                    print(line)
-            # needs a checkoutline instance for .....
+                #for line in self._store.checkout_line_list:
+                    # print(line)
+                    # needs a checkoutline instance for .....
             elif isinstance(event, Line_close):
                 " "
 
@@ -93,4 +93,4 @@ class GroceryStoreSimulation:
 if __name__ == '__main__':
     sim = GroceryStoreSimulation('config.json')
     final_stats = sim.run('events.txt')
-    print(final_stats)
+    #print(final_stats)
