@@ -7,12 +7,7 @@ kinds of events in the simulation.
 # Just don't import any external libraries!
 from container import PriorityQueue
 from store import GroceryStore
-from event import Event, create_event_list,Cust_arrive,Line_close
-
-
-
-
-
+from event import Event, create_event_list, Cust_arrive, Line_close
 
 
 class GroceryStoreSimulation:
@@ -31,6 +26,7 @@ class GroceryStoreSimulation:
     autotesting purposes. This makes it ESSENTIAL that you do not change the
     interface in any way!
     """
+
     # === Private Attributes ===
     # @type _events: PriorityQueue[Event]
     #     A sequence of events arranged in priority determined by the event
@@ -67,23 +63,28 @@ class GroceryStoreSimulation:
         }
 
         initial_events = create_event_list(event_file)
+        print(self._events)
         for event in initial_events:
             self._events.add(event)
 
 
-        print(initial_events)
         # TODO: Process all of the events, collecting statistics along the way.
 
-        #cycle through every initial event
-        for store_event in initial_events:
+        # cycle through every initial event
+        print(self._events.is_empty())
+        while not self._events.is_empty():
 
-             #checking what type of events is being processed new customer or line closure
-             if isinstance(store_event,Cust_arrive):
-                 " "
-             #needs a checkoutline instance for .....
-             elif isinstance(store_event,Line_close):
-                 " "
+            event = self._events.remove()
 
+            print('enter the while loop')
+            # checking what type of events is being processed new customer or line closure
+            if isinstance(event, Cust_arrive):
+                shortest_line = 0
+                for line in self._store.checkout_line_list:
+                    print(line)
+            # needs a checkoutline instance for .....
+            elif isinstance(event, Line_close):
+                " "
 
         return stats
 

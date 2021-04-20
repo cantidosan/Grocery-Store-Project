@@ -35,15 +35,14 @@ class GroceryStore:
 
         for element in range(config['cashier_count']):
             self.checkout_line_list.append(standard_checkout)
-            print(self.checkout_line_list)
-            print(element)
+
         for element in range(config['express_count']):
             self.checkout_line_list.append(exp_checkout)
-            print(self.checkout_line_list)
+
 
         for element in range(config['self_serve_count']):
             self.checkout_line_list.append(self_checkout)
-            print(self.checkout_line_list)
+
 
 
 
@@ -53,7 +52,9 @@ class GroceryStore:
 
 
 class Customer(GroceryStore):
-    ""
+    "initializes a customer instance with three parameters"
+    "time_stamp: type (int) cust_id:type (str) num_items: type (int)"
+
     def __init__(self, time_stamp, cust_id, num_items):
 
         self.time_stamp = time_stamp
@@ -62,7 +63,7 @@ class Customer(GroceryStore):
 
 
 class exp_checkout(GroceryStore):
-    ""
+    "initializes an express checkoutline instance"
 
     def __init__(self,config):
 
@@ -79,7 +80,7 @@ class exp_checkout(GroceryStore):
 
 
 class standard_checkout(GroceryStore):
-    ""
+    "initializes a standard cashier mounted checkout line"
     def __init__(self,config):
 
         self.line_capacity=config['line_capacity']

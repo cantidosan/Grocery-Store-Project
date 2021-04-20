@@ -56,6 +56,7 @@ class PriorityQueue(Container):
 
     All objects in the container must be of the same type.
     """
+
     # === Private Attributes ===
     # @type _items: list
     #     The items stored in the priority queue.
@@ -128,15 +129,17 @@ class PriorityQueue(Container):
         ['arju', 'fred', 'hat', 'mona']
         """
         # TODO: Implement this method.
-        loc=0
-        for event in self._items:
+        loc = 0
+        if not self._items:
+            self._items = [item]
+            for event in self._items:
             # _item contains 3 events with the timestamps
-            #4,8 and 16
-
-            if item.timestamp >= event.timestamp:
-                break
-            #arrays will be pushed down by 1 value and the
-            #new timestamped event will take the spot
-            loc+=1
-        return self._items.append(item)
-
+            # 4,8 and 16
+                print('within for loop')
+                if not item.__le__(event):
+                    print('event comparison')
+                    self._items.insert(loc, item)
+                    break
+            # arrays will be pushed down by 1 value and the
+            # new timestamped event will take the spot
+            loc += 1
