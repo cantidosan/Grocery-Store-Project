@@ -70,21 +70,41 @@ class GroceryStoreSimulation:
 
         # TODO: Process all of the events, collecting statistics along the way.
 
+        #When a new customer joins, he or she always joins the open line with the fewest number
+        # of customers that he or she is allowed to join, choosing the one with
+        # the lowest index (as represented by the grocery store) if there is a tie.
         # cycle through every initial event
 
         while not self._events.is_empty():
-
+            time_stamp = 0
             event = self._events.remove()
-
 
             # checking what type of events is being processed new customer or line closure
             if isinstance(event, Cust_arrive):
-                shortest_line = 0
-                #for line in self._store.checkout_line_list:
-                    # print(line)
-                    # needs a checkoutline instance for .....
-            elif isinstance(event, Line_close):
+                shortest_line = self._store.shortest_open_line()
+                if shortest_line == None:
+                    raise Exception(' Store closed, no empty lines, go away')
+                else:
+                    #empty lines trigger both the cust_arrive
+                    #and finish checkout time stamps
+                    #Shortest_line :type checkout_line instance
+                    if shortest_line.num_cust_in_line()== 0 :
+                        #new_event =self.customer_arrive(event)
+                        print('deep in the isinstance')
+
+
+
+
+
+
+   ##         elif isinstance(event, Line_close):
                 " "
+
+            #elif isinstance(event, Begin_checkout):
+            #   ""
+
+   ##         elif isinstance(event, Finish_checkout):
+                ""
 
         return stats
 

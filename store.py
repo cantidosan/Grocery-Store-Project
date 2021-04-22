@@ -46,6 +46,28 @@ class GroceryStore:
 
 
 
+    def  shortest_open_line(self):
+        #returns the array of the shortest line in the available checkouts
+        #assign shortest_line variable to NOne accounts for the [0] element being close upon
+        #first iteration
+        shortest_line = None
+
+        for checkout_line in self.checkout_line_list:
+             print(type(checkout_line))
+             if checkout_line.state != 'OPEN':
+                continue
+             if shortest_line == None:
+                shortest_line = checkout_line
+                continue
+             if checkout_line.num_cust_in_line() < shortest_line.num_cust_in_line() :
+                shortest_line = checkout_line
+
+        return shortest_line
+
+
+
+
+
 
 
 
@@ -55,9 +77,8 @@ class Customer(GroceryStore):
     "initializes a customer instance with three parameters"
     "time_stamp: type (int) cust_id:type (str) num_items: type (int)"
 
-    def __init__(self, time_stamp, cust_id, num_items):
+    def __init__(self, cust_id, num_items):
 
-        self.time_stamp = time_stamp
         self.cust_id = cust_id
         self.num_items = num_items
 
@@ -70,6 +91,15 @@ class exp_checkout(GroceryStore):
         self.cust_in_line_list=[]
         self.line_cap = config['line_capacity']
         self.state = 'OPEN'
+
+    def line_status(self):
+
+        return self.state
+
+    def num_cust_in_line(self):
+        # returns the number of customers currently waiting to begin checkout
+
+        return len(self.cust_in_line_list)
 
     def proc_checkout(self):
 
@@ -87,6 +117,14 @@ class standard_checkout(GroceryStore):
         self.cust_in_line_list=[]
         self.state = 'OPEN'
 
+    def num_cust_in_line(self):
+        # returns the number of customers currently waiting to begin checkout
+
+        return len(self.cust_in_line_list)
+
+    def line_status(self):
+
+        return self.state
 
     def proc_checkout(self):
 
@@ -103,6 +141,14 @@ class self_checkout(GroceryStore):
         self.cust_in_line_list=[]
         self.state = 'OPEN'
 
+    def line_status(self):
+
+        return self.state
+    
+    def num_cust_in_line(self):
+        # returns the number of customers currently waiting to begin checkout
+
+        return len(self.cust_in_line_list)
 
     def proc_checkout(self):
 

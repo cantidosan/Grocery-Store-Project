@@ -5,7 +5,7 @@ kinds of events in the simulation.
 """
 # Feel free to import classes and functions from
 # *your other files*, but remember not to import any external libraries.
-
+from store import *
 
 class Event:
     """An event.
@@ -168,19 +168,28 @@ class Event:
 
 # TODO: Create subclasses for the different types of events below.
 
+class Begin_checkout(Event):
+    #creating a begin checkout event to return to the simpulation
+    def __init__(self):
+        pass
+
+
+class Finish_checkout(Event):
+    pass
+
+
 class Cust_arrive(Event):
     "Once the customer info is read from the file the second element is confirmed as 'Arrive'"
     ""
-    def __init__(self,timestamp,Cust_id,prod_count):
+    def __init__(self,timestamp,cust_id,prod_count):
         super().__init__(timestamp)
-        self.cust_id   = Cust_id
-        self.prod_count = prod_count
+        self.customer = Customer(cust_id,prod_count)
 
     def __repr__(self):
-        #returns a string representation of the object which can be used to construct the object again
+        #returns a string representation of the customer object which can be used to construct the object again
         #'Timestamp:60 , Cust_id: BOb , PRod Count: 12'
 
-        return  str(self.timestamp) + " " +(self.cust_id) + " " + (self.prod_count)
+        return str(self.customer.cust_id) + " " +(self.customer.prod_count)
 
 class Line_close(Event):
     "Once the checkout counter information is updated as 'Close'"
@@ -223,8 +232,14 @@ def create_event_list(filename):
 
                 if 'Arrive' == tokens[1]:
                     #create arrival event and append it to events list
+                    #creating a customer arrival event
+                    #tokens[0] = timestamp
+                    #tokens[1] =  type of event
+                    #tokens[2] =cust_id
+                    #tokens[3] =  number of items in customer  basket
 
                     events.append(Cust_arrive(tokens[0],tokens[2],tokens[3]))
+
                 elif 'Close' == tokens[1]:
                     #create checkoutlane closure event and add it to the events list
 

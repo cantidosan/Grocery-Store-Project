@@ -131,7 +131,7 @@ class PriorityQueue(Container):
         # TODO: Implement this method.
         loc = 0
         if not self._items:
-            print('works fine')
+            #print('works fine')
             self._items = [item]
 
         else:
@@ -148,4 +148,4 @@ class PriorityQueue(Container):
                 #print(loc)
                 loc+=1
             self._items.insert(loc,item)
-            print(self._items)
+            #print(self._items)
