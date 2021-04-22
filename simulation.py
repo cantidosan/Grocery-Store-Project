@@ -78,19 +78,10 @@ class GroceryStoreSimulation:
         while not self._events.is_empty():
             time_stamp = 0
             event = self._events.remove()
+            print(type(event))
+            new_events = event.do(self._store)
+            print(new_events)
 
-            # checking what type of events is being processed new customer or line closure
-            if isinstance(event, Cust_arrive):
-                shortest_line = self._store.shortest_open_line()
-                if shortest_line == None:
-                    raise Exception(' Store closed, no empty lines, go away')
-                else:
-                    #empty lines trigger both the cust_arrive
-                    #and finish checkout time stamps
-                    #Shortest_line :type checkout_line instance
-                    if shortest_line.num_cust_in_line()== 0 :
-                        #new_event =self.customer_arrive(event)
-                        print('deep in the isinstance')
 
 
 
@@ -98,13 +89,13 @@ class GroceryStoreSimulation:
 
 
    ##         elif isinstance(event, Line_close):
-                " "
+
 
             #elif isinstance(event, Begin_checkout):
             #   ""
 
    ##         elif isinstance(event, Finish_checkout):
-                ""
+
 
         return stats
 

@@ -170,7 +170,9 @@ class Event:
 
 class Begin_checkout(Event):
     #creating a begin checkout event to return to the simpulation
-    def __init__(self):
+
+    def __init__(self,timestamp,prod_count):
+        super().__init__(timestamp)
         pass
 
 
@@ -190,6 +192,37 @@ class Cust_arrive(Event):
         #'Timestamp:60 , Cust_id: BOb , PRod Count: 12'
 
         return str(self.customer.cust_id) + " " +(self.customer.prod_count)
+
+    def do(self,store):
+
+
+        new_events_list =[]
+
+        shortest_line = store.shortest_open_line()
+        print(shortest_line)
+        # print(type(shortest_line))
+        if shortest_line == None:
+            raise Exception(' Store closed, no empty lines, go away')
+        else:
+            # empty lines trigger both the cust_arrive
+            # and finish checkout time stamps
+            # Shortest_line :type checkout_line instance
+            if shortest_line.num_cust_in_line() == 0:
+                # adding new customer object to the empty checkout line
+                shortest_line.cust_in_line_list = [self.customer]
+                #process the customer using  the given checkout line speed
+                #self.customer.num_items
+                print(type((shortest_line)))
+                #shortest_line.Begin_checkout()
+
+
+
+
+
+
+
+        return new_events_list
+
 
 class Line_close(Event):
     "Once the checkout counter information is updated as 'Close'"
