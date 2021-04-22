@@ -169,11 +169,17 @@ class Event:
 # TODO: Create subclasses for the different types of events below.
 
 class Begin_checkout(Event):
-    #creating a begin checkout event to return to the simpulation
+    # creating a begin checkout event to return to the simulation
 
-    def __init__(self,timestamp,prod_count):
+    def __init__(self, timestamp, customer):
         super().__init__(timestamp)
-        pass
+        self.customer = customer
+
+    def __repr__(self):
+        # string representation of the begin checkout function
+        #'Timestamp:60 , Cust_id: BOb , Prod Count: 12'
+
+        return str(self.timestamp) + " " +str(self.customer.cust_id) + " " +(self.customer.num_items)
 
 
 class Finish_checkout(Event):
@@ -199,9 +205,9 @@ class Cust_arrive(Event):
         new_events_list =[]
 
         shortest_line = store.shortest_open_line()
-        print(shortest_line)
+
         # print(type(shortest_line))
-        if shortest_line == None:
+        if shortest_line is None:
             raise Exception(' Store closed, no empty lines, go away')
         else:
             # empty lines trigger both the cust_arrive
@@ -212,7 +218,14 @@ class Cust_arrive(Event):
                 shortest_line.cust_in_line_list = [self.customer]
                 #process the customer using  the given checkout line speed
                 #self.customer.num_items
-                print(type((shortest_line)))
+                # If a new customer joins an empty checkout line, a new "checking
+                #out" event is added with the same timestamp as the join event.
+
+                new_events_list.append(Begin_checkout(self.timestamp,self.customer))
+
+                #print(new_events_list)
+                #print(shortest_line.cust_in_line_list)
+                #shortest_line.cust_in_line_list.
                 #shortest_line.Begin_checkout()
 
 
@@ -238,6 +251,9 @@ class Line_close(Event):
 
         return  str(self.timestamp) + " " +(self.closing_checkout_number)
 
+    def do(self,store):
+        print('Im processing line_close.....')
+        return[]
 
 
 # TODO: Complete this function, which creates a list of events from a file.

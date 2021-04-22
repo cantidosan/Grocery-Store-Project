@@ -78,7 +78,7 @@ class GroceryStoreSimulation:
         while not self._events.is_empty():
             time_stamp = 0
             event = self._events.remove()
-            print(type(event))
+
             new_events = event.do(self._store)
             print(new_events)
 

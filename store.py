@@ -79,8 +79,7 @@ class Customer(GroceryStore):
 
     def __init__(self, cust_id, num_items):
 
-        self.cust_id\
-            = cust_id
+        self.cust_id = cust_id
         self.num_items = num_items
 
     def __repr__(self):
