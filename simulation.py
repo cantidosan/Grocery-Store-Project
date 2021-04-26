@@ -67,20 +67,22 @@ class GroceryStoreSimulation:
         for event in initial_events:
             self._events.add(event)
 
-
+        #print(self._events._items)
         # TODO: Process all of the events, collecting statistics along the way.
 
         #When a new customer joins, he or she always joins the open line with the fewest number
         # of customers that he or she is allowed to join, choosing the one with
         # the lowest index (as represented by the grocery store) if there is a tie.
         # cycle through every initial event
-
+        #print(self._events)
         while not self._events.is_empty():
-            time_stamp = 0
-            event = self._events.remove()
 
+            event = self._events.remove()
+            print(type(event))
             new_events = event.do(self._store)
-            print(new_events)
+
+            self._events.add(new_events)
+            #print(self._events)
 
 
 

@@ -106,9 +106,9 @@ class exp_checkout(GroceryStore):
 
         return len(self.cust_in_line_list)
 
-    def checkout_time(self):
+    def checkout_time(self,timestamp,customer):
 
-       return ((self.cust_in_line_list[0].num_items) + 4)
+        return int(timestamp) + int(customer.num_items) + 4
 
 
 
@@ -131,9 +131,9 @@ class standard_checkout(GroceryStore):
 
         return self.state
 
-    def checkout_time(self):
+    def checkout_time(self,timestamp,customer):
 
-        return ((self.cust_in_line_list[0].num_items) + 7)
+        return int(timestamp) + int(customer.num_items) + 7
 
 
 
@@ -155,9 +155,9 @@ class self_checkout(GroceryStore):
 
         return len(self.cust_in_line_list)
 
-    def checkout_time(self):
+    def checkout_time(self,timestamp,customer):
 
-        return ((self.cust_in_line_list[0].num_items)*2 + 1)
+        return int(timestamp) + int(customer.num_items*2) + 1
 
 
 

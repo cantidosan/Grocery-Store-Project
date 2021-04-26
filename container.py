@@ -113,7 +113,7 @@ class PriorityQueue(Container):
         """
         return len(self._items) == 0
 
-    def add(self, item):
+    def add(self, events):
         """Add <item> to this PriorityQueue.
 
         @type self: PriorityQueue
@@ -129,17 +129,20 @@ class PriorityQueue(Container):
         ['arju', 'fred', 'hat', 'mona']
         """
         # TODO: Implement this method.
-        loc = 0
-        if not self._items:
-            #print('works fine')
-            self._items = [item]
+       for item in events:
 
-        else:
-            for event in self._items:
-                # _item contains 3 events with the timestamps
-                # 4,8 and 16
-                #print(f'{item.timestamp} < {event.timestamp}')
-                #print(item.__lt__(event)#)
+            loc = 0
+            if not self._items:
+                #print('works fine')
+                #the assignment below is an alternative to
+                self._items = [item]
+
+            else:
+                for event in self._items:
+                    # _item contains 3 events with the timestamps
+                    # 4,8 and 16
+                    #print(f'{item.timestamp} < {event.timestamp}')
+                    #print(item.__lt__(event)#)
 
                 if item.__lt__(event):
                     #print(f'{item.timestamp} > {event.timestamp}')
@@ -148,4 +151,4 @@ class PriorityQueue(Container):
                 #print(loc)
                 loc+=1
             self._items.insert(loc,item)
-            #print(self._items)
+            print(self._items)
