@@ -1,9 +1,6 @@
 # Grocery Store Project 
  My Base Code
-Assignment 1 - Grocery Store Simulation
-Marking scheme posted!
 
-Sample tests posted! (See the unit test file for details.)
 
 Grocery stores often have a difficult task: they must determine how many employees to hire to staff checkout lines during varying levels of customers throughout the day. Too few open lines means customers spend time angrily waiting; too many, and the store loses money paying its employees. It's also important to get the right mix of regular and express checkout lines, and perhaps even self-serve lines. Which combination is best depends on what kind of customers the store has.
 
