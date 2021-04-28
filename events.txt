@@ -1,7 +1,4 @@
 20 Arrive Janice 4
 10 Arrive Jack 1
 0 Arrive James 7
-20 Arrive Simone 3
-20 Arrive Tara 2
-50 Close 0
 65 Arrive Elena 10

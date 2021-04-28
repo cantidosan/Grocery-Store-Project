@@ -7,7 +7,7 @@ kinds of events in the simulation.
 # Just don't import any external libraries!
 from container import PriorityQueue
 from store import GroceryStore
-from event import Event, create_event_list, Cust_arrive, Line_close
+from event import Event, create_event_list, CustomerArrive, Line_close
 
 
 class GroceryStoreSimulation:
@@ -80,9 +80,12 @@ class GroceryStoreSimulation:
             event = self._events.remove()
             print(type(event))
             new_events = event.do(self._store)
-
+            #print('new events spawned')
+            #print(type(new_events[0]))
             self._events.add(new_events)
-            #print(self._events)
+            print((self._events._items[0]))
+            #print((self._events._items[1]))
+            #print('============')
 
 
 
@@ -106,4 +109,4 @@ class GroceryStoreSimulation:
 if __name__ == '__main__':
     sim = GroceryStoreSimulation('config.json')
     final_stats = sim.run('events.txt')
-    #print(final_stats)
+    print(final_stats)
