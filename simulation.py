@@ -78,7 +78,7 @@ class GroceryStoreSimulation:
         while not self._events.is_empty():
 
             event = self._events.remove()
-            print(type(event))
+            #print(type(event))
             new_events = event.do(self._store)
             #print('new events spawned')
             #print(type(new_events[0]))

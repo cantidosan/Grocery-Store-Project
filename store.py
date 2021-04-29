@@ -46,10 +46,33 @@ class GroceryStore:
             self.checkout_line_list.append(
                 self_checkout(config['line_capacity']))
 
+
+    def next_customer_in_line(self, customer):
+        """ this takes the customer finishing their checkout
+        and evaluates whether or not there is  a next customer to serve in the
+        line
+        @type self: GroceryStore Object
+        @type customer:  Customer Object
+        The customer object contains the customer's ID and number of items
+        @rtype: Customer Object
+        @rtype: None
+        """
+        checkout_line = self.customer_checkout_line(customer)
+        if self.customer_position(customer) != 0:
+            raise Exception()
+
+        checkout_line.cust_in_line_list.pop(0)
+
+        if not checkout_line.cust_in_line_list:
+            return None
+        else:
+            return checkout_line.cust_in_line_list[0]
+
+
     def customer_position(self, customer, pos=None):
         """ takes a customer and  finds which checkout line it is in
         #returns its position in the line
-        @type: customer   Customer Object
+        @type customer:   Customer Object
          The customer object contains the customer's ID and number of items
         @rtype: integer value
         """
@@ -59,6 +82,24 @@ class GroceryStore:
                 return checkout_line.cust_in_line_list.index(customer)
 
         return -1
+
+
+    def customer_checkout_line(self, customer):
+        """Locates the particular checkoutline being used by the customer
+        and returns it
+        @type self: GroceryStore object
+        @type customer: object
+            The customer object contains the customer's ID and number of items
+        @rtype: checkoutline object
+        @rtype: None
+        """
+
+        for checkout_line in self.checkout_line_list:
+            if customer in checkout_line.cust_in_line_list:
+                return checkout_line
+
+        return None
+
 
     def new_customer(self, cust_id, num_items):
         """ we create the customer class prior to assinging it
@@ -71,10 +112,11 @@ class GroceryStore:
         customer = Customer(cust_id, num_items)
         # establish the shortest available checkoutline in the store
         shortest_line = self.shortest_open_line()
-        # places the custoemr in the checkoutline
+        # places the customer in the checkoutline
         shortest_line.cust_in_line_list.append(customer)
 
         return customer
+
 
     def shortest_open_line(self):
         # returns the array of the shortest line in the available checkouts
