@@ -83,8 +83,7 @@ class GroceryStoreSimulation:
             #print('new events spawned')
             #print(type(new_events[0]))
             self._events.add(new_events)
-            print((self._events._items[0]))
-            #print((self._events._items[1]))
+            #print((self._events._items))
             #print('============')
 
 

@@ -59,7 +59,8 @@ class GroceryStore:
         """
         checkout_line = self.customer_checkout_line(customer)
         if self.customer_position(customer) != 0:
-            raise Exception()
+            print(checkout_line.cust_in_line_list)
+            raise Exception(f'Customer {customer.cust_id} not at front of line')
 
         checkout_line.cust_in_line_list.pop(0)
 
@@ -95,6 +96,7 @@ class GroceryStore:
         """
 
         for checkout_line in self.checkout_line_list:
+            #print(checkout_line.cust_in_line_list)
             if customer in checkout_line.cust_in_line_list:
                 return checkout_line
 
@@ -114,6 +116,7 @@ class GroceryStore:
         shortest_line = self.shortest_open_line()
         # places the customer in the checkoutline
         shortest_line.cust_in_line_list.append(customer)
+        #print(shortest_line.cust_in_line_list)
 
         return customer
 

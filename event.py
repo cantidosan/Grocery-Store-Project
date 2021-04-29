@@ -236,7 +236,9 @@ class FinishCheckout(Event):
 
             event_list = []
         else:
-            event_list = [BeginCheckout(self.new_timestamp, next_customer)]
+            # the next customer in the line  gets a "begin checking out" event
+            # with the same timestamp as the "finish" event
+            event_list = [BeginCheckout(self.timestamp, next_customer)]
 
         return event_list
 
@@ -292,32 +294,7 @@ class CustomerArrive(Event):
     def do(self, store):
         """Returns an list of events generated after accepting the initial event"""
         new_events_list = []
-        # returns the shortest checkoutline in the store
-        # shortest_line = store.shortest_open_line()
 
-        # if shortest_line is None:
-        #    raise Exception(' No available Lines')
-        # else:
-        # ensuring that the line is below capacity for the new customer
-        # if shortest_line.num_cust_in_line() >= shortest_line.line_capacity:
-        #    raise Exception('Line is full')
-
-        # empty lines trigger both the cust_arrive
-        # and finish checkout time stamps
-        # Shortest_line :type checkout_line instance
-        # adding new customer object to the checkout line
-        # shortest_line.cust_in_line_list.append(self.customer)
-
-        # if shortest_line.num_cust_in_line() == 1:
-
-        # If a new customer joins an empty checkout line, a new "checking
-        # out" event is added with the same timestamp as the join event.
-        # process the customer using  the given checkout line speed
-        # appends checkout event to out list
-        # new_events_list.append(Begin_checkout(self.timestamp,self.customer))
-
-        # TO DO here, we cannot move the customer in the line but we want to be able to when
-        # new_events_list.append(Finish_checkout(shortest_line.checkout_time(self.timestamp,self.customer),self.customer))
         customer = store.new_customer(self.cust_id, self.num_items)
         cust_pos_in_line = store.customer_position(customer)
         # if the customer is at the front of the line join line,begin checkout
