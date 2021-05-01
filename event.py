@@ -184,7 +184,7 @@ class BeginCheckout(Event):
 
         return str(self.timestamp) + " " + str(
             self.customer.cust_id) + " " + str(
-            self.customer.num_items)
+            self.customer.num_items) + " BC"
 
     def do(self, store):
         """ takes the customer object and determines the checkoutline occupied
@@ -205,21 +205,20 @@ class BeginCheckout(Event):
 
 
 class FinishCheckout(Event):
-    """ Once the customer has reached the end of their
-    checkout and has made payment"""
+    """ Once the customer has reached the end of the"""
 
     def __init__(self, new_timestamp, customer):
         super().__init__(new_timestamp)
         self.customer = customer
 
     def __repr__(self):
-        """ returns a string representation of the customer object
-         which can be used to construct the object again
+        """returns a string representation of the customer object
+        which can be used to construct the object again
         # 'Timestamp:60 , Cust_id: BOb , PRod Count: 12' """
 
         return str(self.timestamp) + " " + str(
             self.customer.cust_id) + " " + str(
-            self.customer.num_items)
+            self.customer.num_items) + " " + str('FC')
 
 
     def do(self, store):
@@ -231,9 +230,9 @@ class FinishCheckout(Event):
         """
         #return a customer object that is next to be processed
         next_customer = store.next_customer_in_line(self.customer)
-
+        #print('Next Customer'next_customer)
         if next_customer is None:
-
+            #print(' successful none customer')
             event_list = []
         else:
             # the next customer in the line  gets a "begin checking out" event
@@ -243,37 +242,9 @@ class FinishCheckout(Event):
         return event_list
 
 
-# class Join_line(Event):
-# """places the customer in the shortest line available"""
-
-# def __init__(self, new_timestamp, cust_id, num_items):
-#     super().__init__(new_timestamp)
-#     self.cust_id = cust_id
-#     self.num_items = num_items
-
-#  def __repr__(self):
-# returns a string of the joinline event
-#      return []  # str(self.timestamp)+" "+str(self.customer.cust_id) + " " +str(self.customer.num_items)
-
-# def do(self, store):
-
-
-# events_list=[]
-# establishes a shortest line object which contains the list of customers
-# shortest_line = store.shortest_open_line()
-# adds the customer to the established shortest line available
-# shortest_line.cust_in_line_list.append(self.customer)
-# checks if the customer is already at the front of the line
-# if shortest_line.num_cust_in_line() == 1:
-# if the customer is at the front  both events are created and appended
-# events_list.append(Begin_checkout(self.timestamp,self.customer))
-# events_list.append(Finish_checkout(shortest_line.checkout_time(self.timestamp,self.customer),self.customer))
-
-# return events_list
-
-
 class CustomerArrive(Event):
-    """Once the customer info is read from the file the second element is confirmed as 'Arrive'"
+    """Once the customer info is read from the file the second element
+    is confirmed as 'Arrive'
     """
 
     def __init__(self, timestamp, cust_id, num_items):
@@ -288,7 +259,7 @@ class CustomerArrive(Event):
         # 'Timestamp:60 , Cust_id: BOb , PRod Count: 12'
 
         return str(self.timestamp) + " " + str(self.cust_id) + " " + str(
-            self.num_items)
+            self.num_items) + " " + str('CA')
 
 
     def do(self, store):
@@ -300,15 +271,49 @@ class CustomerArrive(Event):
         # if the customer is at the front of the line join line,begin checkout
         if cust_pos_in_line == 0:
             #add these two generated events to our list of events to pass
-
+            print('Cx evaluated as front of the line')
             new_events_list.append(BeginCheckout(self.timestamp, customer))
-            new_events_list.append(FinishCheckout(self.timestamp, customer))
+            #new_events_list.append(FinishCheckout(self.timestamp, customer))
+
+        return new_events_list
+
+class ChangeLine(Event):
+    """ This takes the customers from the recently closed checkoutline and finds
+    a new OPEN line to place the customer in
+    """
+    def __init__(self, timestamp, customer):
+        super().__init__(timestamp)
+        self.customer = customer
+
+    def __repr__(self):
+        pass
+
+    def do(self, store):
+        """this takes the customer object and reassigns it to a new
+        checkoutline """
+
+        new_events_list = []
+        #establishes the shortest line available for the moving customer
+        shortest_line = store.shortest_open_line()
+        #appends the customer to the shortest line available
+        shortest_line.cust_in_line_list.append(self.customer)
+        cust_pos_in_line = store.customer_position(self.customer)
+        # if the customer is at the front of the line join line,begin checkout
+        if cust_pos_in_line == 0:
+            #add these two generated events to our list of events to pass
+            new_events_list.append(BeginCheckout(self.timestamp, self.customer))
+
+
 
         return new_events_list
 
 
-class Line_close(Event):
-    "Once the checkout counter information is updated as 'Close'"
+class LineClose(Event):
+    """Once the checkout counter information is updated as 'Close' all customers
+    except the next in line.All subsequent customers in line become
+    CustomerArrive events as
+    now have to rejoin available checkoutlines"""
+
 
     def __init__(self, timestamp, closing_checkout_number):
         super().__init__(timestamp)
@@ -318,17 +323,24 @@ class Line_close(Event):
         # returns a string representation of the object which can be used to construct the object again
         # 'Timestamp:5 , 'Close' , Closing_checkout_number: 2'
 
-        return str(self.timestamp) + " " + (self.closing_checkout_number)
+        return str(self.timestamp) + " " + (self.closing_checkout_number) + " LC"
 
     def do(self, store):
-        print('Im processing line_close.....')
+        """ If a line closes, there is one new "customer joins" event per
+        customer in the checkout line after the first one. The new events
+        should be spaced 1 second apart, with the last customer in the line
+        having the earliest "new customer" event, which is the same as the
+        "line close" event
+        @type self: LineClose object
+        @type store: GroceryStore object
+        @rtype: List[Customers]
+        """
 
-        # We want to close the line
-        # first we should convert the members of the line to Join_line events
-        # with increasing +1 timestamps as we go down the line
-        # except for the next customer in that line who will still be processed there
-        # then change the status of the line to 'Closed'
-        return []
+        events_list = []
+        for customer in store.empty_customers_in_line(int(self.closing_checkout_number)):
+            events_list.append(ChangeLine(self.timestamp, customer))
+
+        return events_list
 
 
 # TODO: Complete this function, which creates a list of events from a file.
@@ -367,7 +379,7 @@ def create_event_list(filename):
             elif 'Close' == tokens[1]:
                 # create checkoutlane closure event and add it to the events list
 
-                events.append(Line_close(tokens[0], tokens[2]))
+                events.append(LineClose(tokens[0], tokens[2]))
             else:
                 # to account for any illogical events read
                 raise NotImplementedError

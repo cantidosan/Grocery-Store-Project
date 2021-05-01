@@ -47,6 +47,25 @@ class GroceryStore:
                 self_checkout(config['line_capacity']))
 
 
+    def empty_customers_in_line(self, checkoutline_number):
+        """ Empties a given checkoutline(except for the first customer in line)
+        based on its number and returns a list
+        of customer in the correct order LIFO
+        @type self: GroceryStore Object
+        @type checkoutline_nubmer: INT
+        @rtype: List[Customers]
+        """
+        customer_list = []
+        checkout_line = self.checkout_line_list[checkoutline_number]
+        while checkout_line.num_cust_in_line() > 1:
+            customer_list.append(checkout_line.cust_in_line_list.pop())
+
+        checkout_line.state = 'CLOSED'
+        print(checkout_line.state)
+        return customer_list
+
+
+
     def next_customer_in_line(self, customer):
         """ this takes the customer finishing their checkout
         and evaluates whether or not there is  a next customer to serve in the
@@ -58,15 +77,18 @@ class GroceryStore:
         @rtype: None
         """
         checkout_line = self.customer_checkout_line(customer)
+        #print(self.customer_position(customer))
         if self.customer_position(customer) != 0:
-            print(checkout_line.cust_in_line_list)
+            #print(checkout_line.cust_in_line_list)
             raise Exception(f'Customer {customer.cust_id} not at front of line')
 
         checkout_line.cust_in_line_list.pop(0)
 
         if not checkout_line.cust_in_line_list:
+            #print('this right here officer! line 69')
             return None
         else:
+            #print('returning the next cust in line')
             return checkout_line.cust_in_line_list[0]
 
 
@@ -79,7 +101,9 @@ class GroceryStore:
         """
 
         for checkout_line in self.checkout_line_list:
+            #print(customer)
             if customer in checkout_line.cust_in_line_list:
+                #print('Cx added to line and indexed correctly')
                 return checkout_line.cust_in_line_list.index(customer)
 
         return -1
@@ -97,9 +121,12 @@ class GroceryStore:
 
         for checkout_line in self.checkout_line_list:
             #print(checkout_line.cust_in_line_list)
+            #print(checkout_line)
+            #print(customer)
             if customer in checkout_line.cust_in_line_list:
+                #print('match')
                 return checkout_line
-
+        #print('We got a none here sir!')
         return None
 
 
