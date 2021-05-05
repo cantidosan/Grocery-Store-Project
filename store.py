@@ -32,6 +32,7 @@ class GroceryStore:
         # 'express_count', 'self_serve_count', and 'line_capacity'.
 
         self.checkout_line_list = []
+        self.store_stats = {'num_customers': 0, 'total_time': 0, 'max_wait': -1}
         # open the different checkout counters in the store
 
         for element in range(config['cashier_count']):
@@ -61,12 +62,11 @@ class GroceryStore:
             customer_list.append(checkout_line.cust_in_line_list.pop())
 
         checkout_line.state = 'CLOSED'
-        print(checkout_line.state)
+
         return customer_list
 
 
-
-    def next_customer_in_line(self, customer):
+    def next_customer_in_line(self, customer, timestamp):
         """ this takes the customer finishing their checkout
         and evaluates whether or not there is  a next customer to serve in the
         line
@@ -76,6 +76,12 @@ class GroceryStore:
         @rtype: Customer Object
         @rtype: None
         """
+
+        wait_time = timestamp - customer.arrival_time
+        if wait_time > self.store_stats['max_wait']:
+            self.store_stats['max_wait'] = wait_time
+        if timestamp > self.store_stats['total_time']:
+            self.store_stats['total_time'] = timestamp
         checkout_line = self.customer_checkout_line(customer)
         #print(self.customer_position(customer))
         if self.customer_position(customer) != 0:
@@ -83,7 +89,7 @@ class GroceryStore:
             raise Exception(f'Customer {customer.cust_id} not at front of line')
 
         checkout_line.cust_in_line_list.pop(0)
-
+        self.store_stats['num_customers'] += 1
         if not checkout_line.cust_in_line_list:
             #print('this right here officer! line 69')
             return None
@@ -97,7 +103,7 @@ class GroceryStore:
         #returns its position in the line
         @type customer:   Customer Object
          The customer object contains the customer's ID and number of items
-        @rtype: integer value
+        @rtype: integer value1234567
         """
 
         for checkout_line in self.checkout_line_list:
@@ -130,7 +136,7 @@ class GroceryStore:
         return None
 
 
-    def new_customer(self, cust_id, num_items):
+    def new_customer(self, cust_id, num_items, timestamp):
         """ we create the customer class prior to assinging it
          to the shortest available checkoutline
          @type:cust_id Str
@@ -138,14 +144,31 @@ class GroceryStore:
          @rtype:Customer object"""
 
         # creates the customer object
-        customer = Customer(cust_id, num_items)
+        customer = Customer(cust_id, num_items, timestamp)
         # establish the shortest available checkoutline in the store
-        shortest_line = self.shortest_open_line()
+
+        if self.new_line(customer) is None:
+            raise Exception('no lines available')
+
         # places the customer in the checkoutline
-        shortest_line.cust_in_line_list.append(customer)
+        #shortest_line.cust_in_line_list.append(customer)
         #print(shortest_line.cust_in_line_list)
 
         return customer
+
+    def new_line(self,customer):
+        """assigns a customer object to a new checkoutline  in the store
+        and reutrns the checkoutline object
+        @type self: GroceryStore Object
+        @type customer Customer Object
+        @rtype:checkoutline Object
+        @rtype: None"""
+
+        shortest_line = self.shortest_open_line()
+        # places the customer in the checkoutline
+        if shortest_line is not None:
+            shortest_line.cust_in_line_list.append(customer)
+        return shortest_line
 
 
     def shortest_open_line(self):
@@ -171,9 +194,10 @@ class Customer():
     "initializes a customer instance with three parameters"
     "time_stamp: type (int) cust_id:type (str) num_items: type (int)"
 
-    def __init__(self, cust_id, num_items):
+    def __init__(self, cust_id, num_items, timestamp):
         self.cust_id = str(cust_id)
         self.num_items = int(num_items)
+        self.arrival_time = timestamp
 
     def __repr__(self):
         # returns the customer unique id and items in their posession as a string

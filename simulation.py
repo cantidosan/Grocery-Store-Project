@@ -81,24 +81,8 @@ class GroceryStoreSimulation:
             #print(type(event))
             new_events = event.do(self._store)
             self._events.add(new_events)
-            print((self._events._items))
 
-
-
-
-
-
-
-
-   ##         elif isinstance(event, Line_close):
-
-
-            #elif isinstance(event, Begin_checkout):
-            #   ""
-
-   ##         elif isinstance(event, Finish_checkout):
-
-
+        stats.update(self._store.store_stats)
         return stats
 
 

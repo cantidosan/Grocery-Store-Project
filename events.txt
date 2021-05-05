@@ -1,7 +1,10 @@
 20 Arrive Janice 4
+9 Arrive Bob 8
 10 Arrive Jack 1
 0 Arrive James 7
 20 Arrive Simone 3
 20 Arrive Tara 2
-26 Close 0
 65 Arrive Elena 10
+11 Arrive Miya 4
+14 Arrive Wesley 7
+44 Arrive Lavar 18

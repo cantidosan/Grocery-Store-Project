@@ -229,8 +229,10 @@ class FinishCheckout(Event):
         @rtype: List[Events]
         """
         #return a customer object that is next to be processed
-        next_customer = store.next_customer_in_line(self.customer)
+
+        next_customer = store.next_customer_in_line(self.customer, self.timestamp)
         #print('Next Customer'next_customer)
+
         if next_customer is None:
             #print(' successful none customer')
             event_list = []
@@ -266,12 +268,12 @@ class CustomerArrive(Event):
         """Returns an list of events generated after accepting the initial event"""
         new_events_list = []
 
-        customer = store.new_customer(self.cust_id, self.num_items)
+        customer = store.new_customer(self.cust_id, self.num_items,self.timestamp)
         cust_pos_in_line = store.customer_position(customer)
         # if the customer is at the front of the line join line,begin checkout
         if cust_pos_in_line == 0:
             #add these two generated events to our list of events to pass
-            print('Cx evaluated as front of the line')
+
             new_events_list.append(BeginCheckout(self.timestamp, customer))
             #new_events_list.append(FinishCheckout(self.timestamp, customer))
 
@@ -294,16 +296,15 @@ class ChangeLine(Event):
 
         new_events_list = []
         #establishes the shortest line available for the moving customer
-        shortest_line = store.shortest_open_line()
-        #appends the customer to the shortest line available
-        shortest_line.cust_in_line_list.append(self.customer)
-        cust_pos_in_line = store.customer_position(self.customer)
-        # if the customer is at the front of the line join line,begin checkout
-        if cust_pos_in_line == 0:
-            #add these two generated events to our list of events to pass
+        # and appends the customer to it
+        if store.new_line(self.customer) is None:
+            raise Exception('no new lines')
+
+        # if the customer is at the front of the line begin checkout object
+        #is appended to the events list
+        if store.customer_position(self.customer) == 0:
+            #add these  generated events to our list of events to pass
             new_events_list.append(BeginCheckout(self.timestamp, self.customer))
-
-
 
         return new_events_list
 
@@ -337,8 +338,13 @@ class LineClose(Event):
         """
 
         events_list = []
+
         for customer in store.empty_customers_in_line(int(self.closing_checkout_number)):
+
             events_list.append(ChangeLine(self.timestamp, customer))
+            #timestamp will increment after the first customer inherits
+            #the original timestamp argument
+            self.timestamp += 1
 
         return events_list
 
